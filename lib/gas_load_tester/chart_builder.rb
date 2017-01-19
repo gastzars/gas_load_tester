@@ -68,7 +68,8 @@ module GasLoadTester
              <tr style=\"border: 1px solid black; border-collapse: collapse;\">
                <th width=\"10%\" style=\"border: 1px solid black; border-collapse: collapse;\">client</th>
                <th width=\"10%\" style=\"border: 1px solid black; border-collapse: collapse;\">time (sec)</th>
-               <th width=\"20%\" style=\"border: 1px solid black; border-collapse: collapse;\">average_time (ms)</th>
+               <th width=\"10%\" style=\"border: 1px solid black; border-collapse: collapse;\">clients/sec</th>
+               <th width=\"10%\" style=\"border: 1px solid black; border-collapse: collapse;\">average_time (ms)</th>
                <th width=\"15%\" style=\"border: 1px solid black; border-collapse: collapse;\">min_time (ms)</th>
                <th width=\"15%\" style=\"border: 1px solid black; border-collapse: collapse;\">max_time (ms)</th>
                <th width=\"15%\" style=\"border: 1px solid black; border-collapse: collapse;\">success</th>
@@ -83,7 +84,8 @@ module GasLoadTester
                       test.summary_min_time.round(4),
                       test.summary_max_time.round(4),
                       test.summary_success,
-                      test.summary_error
+                      test.summary_error,
+                      test.request_per_second
                     ]
                   }
                   min_avg = group_data.collect{|test_data| test_data[2] }.sort.first
@@ -97,6 +99,7 @@ module GasLoadTester
                     "<tr style=\"border: 1px solid black; border-collapse: collapse;\">
                        <td style=\"border: 1px solid black; border-collapse: collapse;\">#{test_data[0]}</td>
                        <td style=\"border: 1px solid black; border-collapse: collapse;\">#{test_data[1]}</td>
+                       <td style=\"border: 1px solid black; border-collapse: collapse;\">#{test_data[7]}</td>
                        <td style=\"border: 1px solid black; border-collapse: collapse; #{ 
                          if test_data[2] == min_avg
                            "color: green; font-weight:bold;"
