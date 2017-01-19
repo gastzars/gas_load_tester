@@ -1,6 +1,7 @@
 # GasLoadTester
 
-Simple Ruby load test library.
+Simple Ruby load test library. Give it a try !
+**Warning:** High CPU is needed to run this or you will get an unreliable result. If you are an AWS user, I suggest you to look for spot compute instance for this kind of task.
 
 ## Installation
 
