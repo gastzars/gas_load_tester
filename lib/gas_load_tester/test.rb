@@ -3,26 +3,31 @@ require 'thwait'
 
 module GasLoadTester
   class Test
-    attr_accessor :user, :time, :results
+    attr_accessor :client, :time, :results
 
     DEFAULT = {
-      user: 1000,
+      client: 1000,
       time: 300
     }
 
     def initialize(args = {})
-      args[:user] ||= args['user']
+      args ||= {}
+      args[:client] ||= args['client']
       args[:time] ||= args['time']
+      args.reject!{|key, value| value.nil? }
       args = DEFAULT.merge(args)
 
-      self.user = args[:user]
+      self.client = args[:client]
       self.time = args[:time]
       self.results = {}
+      @run = false
     end
 
     def run(args = {}, &block)
+      args ||= {}
       args[:graph] ||= args['graph']
       args[:file_name] ||= args['file_name']
+      puts "Running test (client: #{self.client}, time: #{self.time})"
       @progressbar = ProgressBar.create(
         :title => "Load test",
         :starting_at => 0,
@@ -35,20 +40,51 @@ module GasLoadTester
       if args[:graph]
         export_file({file_name: args[:file_name]})
       end
+    ensure
+      @run = true
+    end
+
+    def is_run?
+      @run
     end
 
     def request_per_second
-      (self.user/self.time.to_f).ceil
+      (self.client/self.time.to_f).ceil
     end
 
     def export_file(args = {})
+      args ||= {}
       file = args[:file_name] || ''
       chart_builder = GasLoadTester::ChartBuilder.new(file_name: file)
       chart_builder.build_body(self)
       chart_builder.save
     end
 
+    def summary_min_time
+      all_result_time.sort.first*1000
+    end
+
+    def summary_max_time
+      all_result_time.sort.last*1000
+    end
+
+    def summary_avg_time
+      all_result_time.sum.fdiv(all_result_time.size)*1000
+    end
+
+    def summary_success
+      self.results.collect{|key, values| values.select{|val| val.pass }.count }.flatten.sum
+    end
+
+    def summary_error
+      self.results.collect{|key, values| values.select{|val| !val.pass }.count }.flatten.sum
+    end
+
     private
+
+    def all_result_time
+      self.results.collect{|key, values| values.collect(&:time) }.flatten
+    end
 
     def load_test(block)
       threads = []

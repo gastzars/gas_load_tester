@@ -4,21 +4,17 @@ Simple Ruby load test library.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'gas_load_tester'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
+Install it yourself as:
 
     $ gem install gas_load_tester
 
 ## Usage
+
+#### Require the library
+
+```ruby
+require 'gas_load_tester'
+```
 
 #### For simple usage
 
@@ -33,7 +29,20 @@ end
 
 ```ruby
 simple_test = GasLoadTester::Test.new({user: 10000, time: 60})
-simple_test.run(graph: true, file: '/mytest/myste.png') do
+simple_test.run(graph: true, file: '/mytest/mysite_result') do
+  RestClient.get("https://www.mysite.com", {})
+end
+```
+
+#### Group comparison test
+
+```ruby
+simple_group_test = GasLoadTester::GroupTest.new([
+  {"client" => 100, "time" => 5},
+  {"client" => 150, "time" => 10},
+  {"client" => 160, "time" => 7}
+])
+simple_group_test.run(graph: true, file: '/mytest/mysite_group_result.html') do
   RestClient.get("https://www.mysite.com", {})
 end
 ```
