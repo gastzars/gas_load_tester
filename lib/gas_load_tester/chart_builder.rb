@@ -27,7 +27,7 @@ module GasLoadTester
       file_name = self.file_name
       if file_name == ""
         file_name = "load_result_"+Time.now.to_i.to_s+".html"
-      elsif file_name.end_with?(".html")
+      elsif !file_name.end_with?(".html")
         file_name = file_name+".html"
       end
       File.open(self.file_name, 'w') { |file| file.write(self.body) }
