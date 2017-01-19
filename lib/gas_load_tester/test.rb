@@ -25,7 +25,7 @@ module GasLoadTester
 
     def run(args = {}, &block)
       args ||= {}
-      args[:graph] ||= args['graph']
+      args[:output] ||= args['output']
       args[:file_name] ||= args['file_name']
       puts "Running test (client: #{self.client}, time: #{self.time})"
       @progressbar = ProgressBar.create(
@@ -37,7 +37,7 @@ module GasLoadTester
         :remainder_mark => "\u{FF65}"
       )
       load_test(block)
-      if args[:graph]
+      if args[:output]
         export_file({file_name: args[:file_name]})
       end
     ensure

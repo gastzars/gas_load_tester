@@ -13,14 +13,14 @@ module GasLoadTester
     end
 
     def run(args = {}, &block)
-      args[:graph] ||= args['graph']
+      args[:output] ||= args['output']
       args[:file_name] ||= args['file_name']
       not_run_tests = self.tests.select{|test| !test.is_run? }
       not_run_tests.each_with_index do |test, index|
         print "[#{index+1}/#{not_run_tests.count}] "
         test.run(nil, &block) unless test.is_run?
       end
-      if args[:graph]
+      if args[:output]
         export_file({file_name: args[:file_name]})
       end
     end

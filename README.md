@@ -25,14 +25,19 @@ simple_test.run do
 end
 ```
 
-#### With generated graph
+#### With html output
 
 ```ruby
 simple_test = GasLoadTester::Test.new({user: 10000, time: 60})
-simple_test.run(graph: true, file: '/mytest/mysite_result') do
+simple_test.run(output: true, file: '/mytest/mysite_result') do
   RestClient.get("https://www.mysite.com", {})
 end
 ```
+
+##### Single test outout is shown as below:
+
+[![Gas load tester single test](http://i216.photobucket.com/albums/cc229/gastzar/solotest.png)](https://github.com/gastzars/gas_load_tester)
+
 
 #### Group comparison test
 
@@ -42,10 +47,14 @@ simple_group_test = GasLoadTester::GroupTest.new([
   {"client" => 150, "time" => 10},
   {"client" => 160, "time" => 7}
 ])
-simple_group_test.run(graph: true, file: '/mytest/mysite_group_result.html') do
+simple_group_test.run(output: true, file: '/mytest/mysite_group_result.html') do
   RestClient.get("https://www.mysite.com", {})
 end
 ```
+
+##### Group test outout is shown as below:
+
+[![Gas load tester group test](http://i216.photobucket.com/albums/cc229/gastzar/group_test.png)](https://github.com/gastzars/gas_load_tester)
 
 ## Development
 
