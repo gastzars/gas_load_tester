@@ -21,7 +21,7 @@ require 'gas_load_tester'
 #### For simple usage
 
 ```ruby
-simple_test = GasLoadTester::Test.new({user: 10000, time: 60})
+simple_test = GasLoadTester::Test.new({client: 10000, time: 60})
 simple_test.run do
   RestClient.get("https://www.mysite.com", {})
 end
@@ -31,7 +31,7 @@ simple_test.results
 #### With html output
 
 ```ruby
-simple_test = GasLoadTester::Test.new({user: 10000, time: 60})
+simple_test = GasLoadTester::Test.new({client: 10000, time: 60})
 simple_test.run(output: true, file: '/mytest/mysite_result') do
   RestClient.get("https://www.mysite.com", {})
 end
