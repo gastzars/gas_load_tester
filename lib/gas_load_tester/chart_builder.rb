@@ -67,7 +67,7 @@ module GasLoadTester
 
     def build_headpart
       "<div style=\"width: 100%;text-align: center;margin-top: 50px;\">
-         #{ header.nil? ? "" : "<span style=\"font-weight: bold;font-size: 20px;\">ah ah</span>" }
+         #{ header.nil? ? "" : "<span style=\"font-weight: bold;font-size: 20px;\">#{ header }</span>" }
          #{ description.nil? ? "" : description.split("\n").collect{|text| "<p>#{text.to_s}</p>" }.join }
        </div><hr style=\"margin-top: 70px; margin-bottom: 70px;\">" if !self.header.nil? || !self.description.nil?
     end
