@@ -49,7 +49,7 @@ module GasLoadTester
     end
 
     def request_per_second
-      (self.client/self.time.to_f).ceil
+      self.client/self.time.to_f
     end
 
     def export_file(args = {})
@@ -89,10 +89,24 @@ module GasLoadTester
     def load_test(block)
       threads = []
       rps = request_per_second
+      rps_decimal = rps.modulo(1)
+      full_rps = (rps - rps_decimal).to_i
+      stacking_decimal = 0.0
+      counter = 0
       self.time.times do |index|
         self.results[index] = []
         start_index_time = Time.now
-        rps.times do
+        stacking_decimal += rps_decimal
+        additional_client = 0
+        if stacking_decimal > 1
+          additional_client = 1
+          stacking_decimal -= 1
+        end
+        if (index+1) == self.time && (counter + (full_rps + additional_client)) < self.client
+          additional_client += (self.client - (counter + (full_rps + additional_client)))
+        end
+        (full_rps + additional_client).times do
+          counter += 1
           threads << Thread.new do
             begin
               start_time = Time.now

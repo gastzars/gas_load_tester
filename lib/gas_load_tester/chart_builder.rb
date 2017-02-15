@@ -85,7 +85,7 @@ module GasLoadTester
                       test.summary_max_time.round(4),
                       test.summary_success,
                       test.summary_error,
-                      test.request_per_second
+                      test.request_per_second.round(2)
                     ]
                   }
                   min_avg = group_data.collect{|test_data| test_data[2] }.sort.first
