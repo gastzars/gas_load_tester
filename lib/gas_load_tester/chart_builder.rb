@@ -5,7 +5,7 @@ module GasLoadTester
 
   class ChartBuilder
     include Chartkick::Helper
-    attr_accessor :file_name, :body
+    attr_accessor :file_name, :body, :header, :description
 
     DEFAULT_PAGE_HEAD = "<!DOCTYPE html>"\
                    "<html>"\
@@ -23,7 +23,11 @@ module GasLoadTester
     def initialize(args = {})
       args ||= {}
       args[:file_name] ||= args['file_name']
+      args[:header] ||= args['header']
+      args[:description] ||= args['description']
       self.file_name = args[:file_name]
+      self.header = args[:header]
+      self.description = args[:description]
     end
 
     def save
@@ -38,22 +42,35 @@ module GasLoadTester
     end
 
     def build_body(test)
+      header_part = build_headpart || ""
+
       sum_body = build_sum_test(test)
 
-      self.body = DEFAULT_PAGE_HEAD + sum_body + DEFAULT_PAGE_TAIL
+      self.body = DEFAULT_PAGE_HEAD + header_part + sum_body + DEFAULT_PAGE_TAIL
     end
 
     def build_group_body(group_test)
-      sum_group_body = group_test.tests.collect{|test|
+      header_part = build_headpart || ""
+
+      sum_group_body = group_test.tests.select{|test|
+        test.is_run?
+      }.collect{|test|
         build_sum_test(test)
       }.join('<hr style="margin-top: 70px; margin-bottom: 70px;">')
 
       sum_group_table = build_sum_group_table(group_test)
 
-      self.body = DEFAULT_PAGE_HEAD + sum_group_table + sum_group_body + DEFAULT_PAGE_TAIL
+      self.body = DEFAULT_PAGE_HEAD + header_part + sum_group_table + sum_group_body + DEFAULT_PAGE_TAIL
     end
 
     private
+
+    def build_headpart
+      "<div style=\"width: 100%;text-align: center;margin-top: 50px;\">
+         #{ header.nil? ? "" : "<span style=\"font-weight: bold;font-size: 20px;\">ah ah</span>" }
+         #{ description.nil? ? "" : description.split("\n").collect{|text| "<p>#{text.to_s}</p>" }.join }
+       </div><hr style=\"margin-top: 70px; margin-bottom: 70px;\">" if !self.header.nil? || !self.description.nil?
+    end
 
     def build_sum_group_table(group_test)
       "<div style=\"width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px;\">
@@ -76,7 +93,7 @@ module GasLoadTester
                <th width=\"15%\" style=\"border: 1px solid black; border-collapse: collapse;\">error</th>
              </tr>
                 #{
-                  group_data = group_test.tests.collect{|test|
+                  group_data = group_test.tests.select{|test| test.is_run? }.collect{|test|
                     [
                       test.client,
                       test.time,

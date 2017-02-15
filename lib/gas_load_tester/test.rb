@@ -27,6 +27,8 @@ module GasLoadTester
       args ||= {}
       args[:output] ||= args['output']
       args[:file_name] ||= args['file_name']
+      args[:header] ||= args['header']
+      args[:description] ||= args['description']
       puts "Running test (client: #{self.client}, time: #{self.time})"
       @progressbar = ProgressBar.create(
         :title => "Load test",
@@ -38,7 +40,7 @@ module GasLoadTester
       )
       load_test(block)
       if args[:output]
-        export_file({file_name: args[:file_name]})
+        export_file({file_name: args[:file_name], header: args[:header], description: args[:description]})
       end
     ensure
       @run = true
@@ -55,7 +57,7 @@ module GasLoadTester
     def export_file(args = {})
       args ||= {}
       file = args[:file_name] || ''
-      chart_builder = GasLoadTester::ChartBuilder.new(file_name: file)
+      chart_builder = GasLoadTester::ChartBuilder.new(file_name: file, header: args[:header], description: args[:description])
       chart_builder.build_body(self)
       chart_builder.save
     end
