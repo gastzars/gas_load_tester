@@ -219,10 +219,13 @@ module GasLoadTester
         pass_data[Time.at(key).utc.strftime("%H:%M:%S")] = values.select{|val| val.pass }.count
         error_data[Time.at(key).utc.strftime("%H:%M:%S")] = values.select{|val| !val.pass }.count
         if RUBY_VERSION >= "2.4.0"
-          average_time_data[Time.at(key).utc.strftime("%H:%M:%S")] = values.collect(&:time).sum.fdiv(values.size)*1000
+          val = values.collect(&:time).sum.fdiv(values.size)*1000
         else
-          average_time_data[Time.at(key).utc.strftime("%H:%M:%S")] = values.collect(&:time).inject(0){|sum,x| sum + x }.fdiv(values.size)*1000
+          val = values.collect(&:time).inject(0){|sum,x| sum + x }.fdiv(values.size)*1000
         end
+        val = 0 if val.to_f.nan?
+        val = 0 if val.infinite?
+        average_time_data[Time.at(key).utc.strftime("%H:%M:%S")] = val
       }
 
       line_chart(
