@@ -39,8 +39,7 @@ end
 
 ##### Single test outout is shown as below:
 
-[![Gas load tester single test](http://i216.photobucket.com/albums/cc229/gastzar/solotest.png)](https://github.com/gastzars/gas_load_tester)
-
+[![Gas load tester single test](https://raw.githubusercontent.com/gastzars/gas_load_tester/master/gitimages/solotest.png)](https://github.com/gastzars/gas_load_tester)
 
 #### Group comparison test
 
@@ -57,7 +56,7 @@ end
 
 ##### Group test outout is shown as below:
 
-[![Gas load tester group test](http://i216.photobucket.com/albums/cc229/gastzar/group_test.png)](https://github.com/gastzars/gas_load_tester)
+[![Gas load tester group test](https://raw.githubusercontent.com/gastzars/gas_load_tester/master/gitimages/group_test.png)](https://github.com/gastzars/gas_load_tester)
 
 ## Development
 
