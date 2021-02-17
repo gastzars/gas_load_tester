@@ -71,15 +71,15 @@ module GasLoadTester
     end
 
     def summary_avg_time
-      all_result_time.sum.fdiv(all_result_time.size)*1000
+      all_result_time.inject(0, :+).fdiv(all_result_time.size)*1000
     end
 
     def summary_success
-      self.results.collect{|key, values| values.select{|val| val.pass }.count }.flatten.sum
+      self.results.collect{|key, values| values.select{|val| val.pass }.count }.flatten.inject(0, :+)
     end
 
     def summary_error
-      self.results.collect{|key, values| values.select{|val| !val.pass }.count }.flatten.sum
+      self.results.collect{|key, values| values.select{|val| !val.pass }.count }.flatten.inject(0, :+)
     end
 
     private
